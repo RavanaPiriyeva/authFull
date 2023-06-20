@@ -3,10 +3,11 @@ import axios from "axios";
 
 
 const initialState = {
-    users: [],
     loading: true,
     error: {},
-    user: {},
+    email: {},
+    token:{},
+    succes:{},
 }
 
 
@@ -16,108 +17,92 @@ export const register = createAsyncThunk(
     async (userData, { rejectWithValue }) => {
         try {
             let res = await axios.post('http://localhost:3000/api/webuser/register', userData);
-            console.log("data", res.data)
-            return res.data;
+            console.log("data", res.data.email)
+            return res.data.email;
         } catch (error) {
             return rejectWithValue(error);
         }
     }
 );
-// export const getUsers = createAsyncThunk(
-//     "api/getUsers",
-//     async (thunkAPI, { rejectWithValue }) => {
-//         try {
-//             let res = await axios.get('http://localhost:3030/api/user/getAll');
-//             //  console.log(res.data)
-//             return res.data;
-//         } catch (error) {
-//             return rejectWithValue(error)
-//         }
-//     }
-// )
-// export const loginUsers = createAsyncThunk(
-//     "api/login",
-//     async (userData, { rejectWithValue }) => {
-//         try {
-//             let res = await axios.post('http://localhost:3030/api/user/login', userData);
-//             console.log("data", res.data)
-//             return res.data;
-//         } catch (error) {
-//             return rejectWithValue(error);
-//         }
-//     }
-// );
-// export const logout = createAsyncThunk("user/logout", async () => {  
-//     return {};
-//   });
-//   export const setSocket = createAsyncThunk("user/socket", async (data) => {  
-//     console.log(data)
-//     return data;
-//   });
+export const confrim = createAsyncThunk(
+    "api/confrim ",
+    async (userData, { rejectWithValue }) => {
+        try {
+            let res = await axios.post('http://localhost:3000/api/webuser/confirm', userData);
+            console.log("data", res.data)
+         //   localStorage.setItem('token', res.data.token);
+            return res.data.token;
+        } catch (error) {
+            return rejectWithValue(error);
+        }
+    }
+);
+export const getToken = createAsyncThunk(
+    "api/token ",
+    async (userData, { rejectWithValue }) => {
+        try {
+            let res = await axios.post('http://localhost:3000/api/webuser/token', userData);
+            console.log("data", res.data)
+           localStorage.setItem('token', res.data.token);
+            return res.data;
+        } catch (error) {
+            console.log(error)
+            return rejectWithValue(error);
+        }
+    }
+);
+
 const userSlice = createSlice({
     name: 'userSlice',
     initialState: initialState,
     extraReducers: {
-        // [getUsers.pending]: (state) => {
-        //     state.loading = true
-        //     state.users = []
-        //     state.error = null
-        // },
-        // [getUsers.rejected]: (state, { payload }) => {
-        //     state.loading = false
-        //     state.users = []
-        //     state.error = payload;
-        // },
-        // [getUsers.fulfilled]: (state, { payload }) => {
-        //     state.users = payload;
-        //     state.loading = false
-        //     state.error = null
-        // },
-        // [loginUsers.pending]: (state) => {
-        //     state.loading = true
-        //     state.user = {}
-        //     state.error = null
-        // },
-        // [loginUsers.rejected]: (state, { payload }) => {
-        //     state.loading = false
-        //     state.user = {}
-        //     state.error = payload;
-        // },
-        // [loginUsers.fulfilled]: (state, { payload }) => {
-        //     state.user = payload;
-        //     state.loading = false
-        //     state.error = null
-        // },
-        // [logout.pending]: (state) => {
-        //     state.loading = true
-        //     state.user = {}
-        //     state.error = null
-        // },
-        // [logout.rejected]: (state, { payload }) => {
-        //     state.loading = false
-        //     state.user = {}
-        //     state.error = payload;
-        // },
-        // [logout.fulfilled]: (state, { payload }) => {
-        //     state.user = payload;
-        //     state.loading = false
-        //     state.error = null
-        // },
-        // [setSocket.pending]: (state) => {
-        //     state.loading = true
-        //     state.socketId = ''
-        //     state.error = null
-        // },
-        // [setSocket.rejected]: (state, { payload }) => {
-        //     state.loading = false
-        //     state.socketId = ''
-        //     state.error = payload;
-        // },
-        // [setSocket.fulfilled]: (state, { payload }) => {
-        //     state.socketId = payload;
-        //     state.loading = false
-        //     state.error = null
-        // }
+        [register.pending]: (state) => {
+            state.loading = true
+            state.email = {}
+            state.error = null
+        },
+        [register.rejected]: (state, { payload }) => {
+            state.loading = false
+            state.email = {}
+            state.error = payload;
+        },
+        [register.fulfilled]: (state, { payload }) => {
+            state.email = payload;
+            state.loading = false
+            state.error = null
+        },
+        [confrim.pending]: (state) => {
+            state.loading = true
+            state.token = {}
+            state.error = null
+        },
+        [confrim.rejected]: (state, { payload }) => {
+            state.loading = false
+            state.token = {}
+            state.error = payload;
+        },
+        [confrim.fulfilled]: (state, { payload }) => {
+            state.token = payload;
+            state.loading = false
+            state.error = null
+        },
+        [getToken.pending]: (state) => {
+            state.loading = true
+            state.succes = {}
+            state.error = null
+        },
+        [getToken.rejected]: (state, { payload }) => {
+            state.loading = false
+            state.succes = {}
+            state.error = payload;
+        },
+        [getToken.fulfilled]: (state, { payload }) => {
+            state.succes = payload;
+            state.loading = false
+            state.error = null
+        },
+
+
     }
 })
 

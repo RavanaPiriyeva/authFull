@@ -9,3 +9,7 @@ export const singInValidations=object({
     email: string().email().required(),
     password: string().required().min(5),
 })
+export const confirmValidation=object({
+  //  email: string().email().required(),
+    code: string().required(),
+})
