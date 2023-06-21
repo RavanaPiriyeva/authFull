@@ -8,8 +8,11 @@ import {
   Button,
 } from "@mui/material";
 import { CatchingPokemon } from "@mui/icons-material";
+import { useSelector } from "react-redux";
 
 export const Layout = () => {
+  const { email, loading, error, token, succes } = useSelector(state => state.userReducer);
+
   return (
     <>
       <AppBar position="static">
@@ -36,22 +39,49 @@ export const Layout = () => {
           </Stack>
           <Stack direction="row" spacing={2}>
             <>
-              <Button
-                component={NavLink}
-                to="/signin"
-                variant="outlined"
-                color="inherit"
-              >
-                Sign In
-              </Button>
-              <Button
-                component={NavLink}
-                to="/signup"
-                variant="outlined"
-                color="inherit"
-              >
-                Sign Up
-              </Button>
+              {
+                !succes.message ?
+                  <>
+                    <Button
+                      component={NavLink}
+                      to="/signin"
+                      variant="outlined"
+                      color="inherit"
+                    >
+                      Sign In
+                    </Button>
+                    <Button
+                      component={NavLink}
+                      to="/"
+                      variant="outlined"
+                      color="inherit"
+                    >
+                      Sign Up
+                     </Button>
+                  </>
+                  :
+                  <>
+                    <Typography
+                      color="white"
+                      noWrap
+                      variant="h6"
+                      component={NavLink}
+                      to="/"
+                      sx={{ textDecoration: "none" }}
+                    >
+                      {succes.name }
+                     </Typography>
+                    <Button
+                      component={NavLink}
+                      to="/"
+                      variant="outlined"
+                      color="inherit"
+                    >
+                      Logout
+                      </Button>
+                  </>
+              }
+
             </>
           </Stack>
         </Toolbar>

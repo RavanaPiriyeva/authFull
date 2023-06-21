@@ -6,7 +6,7 @@ const initialState = {
     loading: true,
     error: {},
     email: {},
-    token:{},
+    token:null,
     succes:{},
 }
 
@@ -17,7 +17,7 @@ export const register = createAsyncThunk(
     async (userData, { rejectWithValue }) => {
         try {
             let res = await axios.post('http://localhost:3000/api/webuser/register', userData);
-            console.log("data", res.data.email)
+         //   console.log("data", res.data.email)
             return res.data.email;
         } catch (error) {
             return rejectWithValue(error);
@@ -29,8 +29,8 @@ export const confrim = createAsyncThunk(
     async (userData, { rejectWithValue }) => {
         try {
             let res = await axios.post('http://localhost:3000/api/webuser/confirm', userData);
-            console.log("data", res.data)
-         //   localStorage.setItem('token', res.data.token);
+          //  console.log("data", res.data)
+          localStorage.setItem('token', res.data.token);
             return res.data.token;
         } catch (error) {
             return rejectWithValue(error);
@@ -42,8 +42,8 @@ export const getToken = createAsyncThunk(
     async (userData, { rejectWithValue }) => {
         try {
             let res = await axios.post('http://localhost:3000/api/webuser/token', userData);
-            console.log("data", res.data)
-           localStorage.setItem('token', res.data.token);
+         //  localStorage.setItem('token',token);
+         console.log(res.data)
             return res.data;
         } catch (error) {
             console.log(error)
@@ -73,12 +73,12 @@ const userSlice = createSlice({
         },
         [confrim.pending]: (state) => {
             state.loading = true
-            state.token = {}
+            state.token = null
             state.error = null
         },
         [confrim.rejected]: (state, { payload }) => {
             state.loading = false
-            state.token = {}
+            state.token = null
             state.error = payload;
         },
         [confrim.fulfilled]: (state, { payload }) => {

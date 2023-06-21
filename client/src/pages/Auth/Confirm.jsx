@@ -9,14 +9,17 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import { confrim, register ,getToken } from "../../store/userSlice";
+import { confrim, register, getToken } from "../../store/userSlice";
 import { paperStyle } from "./AuthStyles";
 import { confirmValidation, singUpValidations } from "./validations";
+import { useNavigate } from 'react-router';
 const Confirm = () => {
     let dispatch = useDispatch();
+    const navigate = useNavigate();
+
     //console.log("ss")
-    const { email, loading, error ,token ,succes } = useSelector(state => state.userReducer);
-    console.log(email)
+    const { email, loading, error, token, succes } = useSelector(state => state.userReducer);
+    //  console.log(email)
     const { handleSubmit, handleChange, touched, values, errors } = useFormik({
         initialValues: {
             email: "",
@@ -24,21 +27,31 @@ const Confirm = () => {
         },
         validationSchema: confirmValidation,
         onSubmit: (values, bag) => {
-            values.email=email
-            console.log(values)
-              dispatch(confrim(values))
+            values.email = email
+            //  console.log(values)
+
+            dispatch(confrim(values))
         },
     });
+    useEffect(() => {
+        console.log("token", token)
+        console.log("error", error)
+        console.log("succes", succes)
+        if (token && !error) {
+            const tokenObj = {
+                token: token
+            };
+            dispatch(getToken(tokenObj))
+        }
+
+    }, [token]);
 
     useEffect(() => {
-        if (!error) {
-            console.log(token)
-            dispatch(getToken(token))
-           // console.log("ssssssssssss" , succes)
+        if (succes.message) {
+            navigate("/")
         }
-      }, [error]);
-    
-    
+    }, [succes]);
+
     return (
         <Grid>
             <Paper elevation={20} style={paperStyle}>

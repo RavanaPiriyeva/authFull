@@ -26,11 +26,12 @@ export const RegisterPage = () => {
       confirmPassword: "",
     },
     validationSchema: singUpValidations,
-    onSubmit: ({ email, password }, bag) => {
-      console.log("Jjj")
+    onSubmit: ({ email, password ,username }, bag) => {
+    //  console.log("Jjj")
       const value = {
         email: email,
         password: password,
+        name:username,
       };
       dispatch(register(value))
     
@@ -38,8 +39,10 @@ export const RegisterPage = () => {
   });
   useEffect(() => {
     if (!error) {
+   //   console.log("errorrrr", error)
       navigate("/confirm");
     }
+   
   }, [error]);
 
 

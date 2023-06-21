@@ -22,6 +22,7 @@ const webUserController = {
 
                     let codeExpire = moment().add("59", "s")
                     const webUser = new WebUser({
+                        name: req.body.name,
                         email: email,
                         password: req.body.password,// danger area. !!! password asla gözükmemeli. code review olacak!
                         code: confirmCode,
@@ -46,6 +47,7 @@ const webUserController = {
     confirm: (req, res) => {
         let code = req.body.code;
         let email = req.body.email;
+        
 
         WebUser.findOne({ email: email })
             .then(user => {
@@ -57,7 +59,8 @@ const webUserController = {
                 else {
                     if (user.code == code) {
                         if (user.codeExpire > moment()) {
-                            let token = jwt.sign(email, privateKey);
+                            let payload = { user: user };
+                            let token = jwt.sign(payload , privateKey);
                             user.isActive = true;
                             user.codeCounter = 3;
                             user.save();
@@ -111,8 +114,9 @@ const webUserController = {
         let token = req.body.token;
 
         try {
-            jwt.verify(token, privateKey);
-            res.json({ "message": "Success" })
+            let decodedToken = jwt.verify(token, privateKey);
+            let nameu = decodedToken.user.name;
+            res.json({ "message": "Success", "name": `${nameu}` });
         } catch (error) {
             res.status(500).json({ "message": "Token error!" })
         }
