@@ -47,7 +47,7 @@ const webUserController = {
     confirm: (req, res) => {
         let code = req.body.code;
         let email = req.body.email;
-        
+
 
         WebUser.findOne({ email: email })
             .then(user => {
@@ -59,8 +59,8 @@ const webUserController = {
                 else {
                     if (user.code == code) {
                         if (user.codeExpire > moment()) {
-                            let payload = { user: user };
-                            let token = jwt.sign(payload , privateKey);
+                            // let payload = { user: user };
+                            let token = jwt.sign(email, privateKey);
                             user.isActive = true;
                             user.codeCounter = 3;
                             user.save();
@@ -114,9 +114,12 @@ const webUserController = {
         let token = req.body.token;
 
         try {
-            let decodedToken = jwt.verify(token, privateKey);
-            let nameu = decodedToken.user.name;
-            res.json({ "message": "Success", "name": `${nameu}` });
+           
+            // let userobj = decodedToken.user;
+            const email = jwt.verify(token, privateKey);
+            WebUser.findOne({ email: email }).then(function (user) {
+                res.json({ "message": "Success", user: user })
+            });
         } catch (error) {
             res.status(500).json({ "message": "Token error!" })
         }

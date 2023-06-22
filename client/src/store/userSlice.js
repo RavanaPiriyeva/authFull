@@ -5,7 +5,7 @@ import axios from "axios";
 const initialState = {
     loading: true,
     error: {},
-    email: {},
+    email: null,
     token:null,
     succes:{},
 }
@@ -58,12 +58,12 @@ const userSlice = createSlice({
     extraReducers: {
         [register.pending]: (state) => {
             state.loading = true
-            state.email = {}
+            state.email = null
             state.error = null
         },
         [register.rejected]: (state, { payload }) => {
             state.loading = false
-            state.email = {}
+            state.email = null
             state.error = payload;
         },
         [register.fulfilled]: (state, { payload }) => {

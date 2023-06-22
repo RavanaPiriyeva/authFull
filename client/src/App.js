@@ -16,6 +16,8 @@ function App() {
   let dispatch = useDispatch();
 
   useEffect(() => {
+    console.log("sdsfd", email)
+
     const storedItem = localStorage.getItem("token");
     if (storedItem) {
       const tokenObj = {
@@ -26,12 +28,15 @@ function App() {
   }, []);
   return (
     <Routes>
-      <Route path="/" element={succes.message ? <Layout /> : <RegisterPage />}>
+      <Route path="/" element={!succes.message ? <RegisterPage /> : <Layout />}>
         <Route index element={<Chat />} />
         <Route path="/signin" element={<LoginPage />} />
         {/* <Route path="/signup" element={<RegisterPage />} /> */}
       </Route>
-      <Route path="/confirm" element={<Confirm />} />
+     
+        <Route path="/confirm" element={<Confirm />} />
+     
+
     </Routes>
   );
 }

@@ -69,7 +69,7 @@ export const Layout = () => {
                       to="/"
                       sx={{ textDecoration: "none" }}
                     >
-                      {succes.name }
+                      {succes.email }
                      </Typography>
                     <Button
                       component={NavLink}

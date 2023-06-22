@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { confrim, register, getToken } from "../../store/userSlice";
 import { paperStyle } from "./AuthStyles";
 import { confirmValidation, singUpValidations } from "./validations";
-import { useNavigate } from 'react-router';
+import { Navigate, useNavigate } from 'react-router';
 const Confirm = () => {
     let dispatch = useDispatch();
     const navigate = useNavigate();
@@ -52,7 +52,7 @@ const Confirm = () => {
         }
     }, [succes]);
 
-    return (
+    return email ? (
         <Grid>
             <Paper elevation={20} style={paperStyle}>
                 <Grid textAlign="center" marginBottom={2}>
@@ -94,6 +94,10 @@ const Confirm = () => {
             </Paper>
         </Grid>
     )
+        :
+        (
+            <Navigate to="/" />
+        );
 }
 
 export default Confirm

@@ -38,7 +38,8 @@ export const RegisterPage = () => {
     },
   });
   useEffect(() => {
-    if (!error) {
+    console.log("aaaa", email)
+    if (!error && email) {
    //   console.log("errorrrr", error)
       navigate("/confirm");
     }
