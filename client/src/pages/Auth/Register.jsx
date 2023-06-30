@@ -10,6 +10,7 @@ import { useFormik } from "formik";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 import { register } from "../../store/userSlice";
 import { paperStyle } from "./AuthStyles";
 import { singUpValidations } from "./validations";
@@ -26,25 +27,28 @@ export const RegisterPage = () => {
       confirmPassword: "",
     },
     validationSchema: singUpValidations,
-    onSubmit: ({ email, password ,username }, bag) => {
-    //  console.log("Jjj")
+    onSubmit: ({ email, password, username }, bag) => {
+      //  console.log("Jjj")
       const value = {
         email: email,
         password: password,
-        name:username,
+        name: username,
       };
       dispatch(register(value))
-    
+
     },
   });
+
   useEffect(() => {
-    console.log("aaaa", email)
+    console.log("aaaa e", email)
+    console.log("errorrrr", error)
+
     if (!error && email) {
-   //   console.log("errorrrr", error)
+      //   console.log("errorrrr", error)
       navigate("/confirm");
     }
-   
-  }, [error]);
+
+  }, [error, email]);
 
 
   return (
@@ -119,6 +123,9 @@ export const RegisterPage = () => {
               Sign Up
               </Button>
           </Grid>
+          <Typography style={{margin:"20px 0"}}>
+            If you have account ? <Link to="/signin">Login</Link>
+           </Typography>
         </form>
       </Paper>
     </Grid>

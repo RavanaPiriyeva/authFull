@@ -84,20 +84,26 @@ const webUserController = {
     },
     login: (req, res) => {
 
-        WebUser.findOne({ email: req.body.email, password: req.body.password, isActive: true })
+        WebUser.findOne({ email: req.body.email, password: req.body.password })
             .then(user => {
                 if (user) {
+                    if (user.isActive) {
+                        let token = jwt.sign(req.body.email, privateKey);
+                        res.json({ token })
+                    }
+                    else {
+                        let confirmCode = Math.floor(Math.random() * 10000) // code review yapılacak. confirm code 35 de olabilir :D
 
-                    let confirmCode = Math.floor(Math.random() * 10000) // code review yapılacak. confirm code 35 de olabilir :D
+                        let codeExpire = moment().add("30", "s")
 
-                    let codeExpire = moment().add("30", "s")
+                        user.code = confirmCode;
+                        user.codeExpire = codeExpire
+                        user.save();
 
-                    user.code = confirmCode;
-                    user.codeExpire = codeExpire
-                    user.save();
+                        sendConfirmEMail(req.body.email, confirmCode)
+                        res.json({ "email": req.body.email })
 
-                    sendConfirmEMail(req.body.email, confirmCode)
-                    res.json({ "email": req.body.email })
+                    }
 
                 }
                 else {
@@ -114,7 +120,7 @@ const webUserController = {
         let token = req.body.token;
 
         try {
-           
+
             // let userobj = decodedToken.user;
             const email = jwt.verify(token, privateKey);
             WebUser.findOne({ email: email }).then(function (user) {

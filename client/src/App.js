@@ -6,11 +6,11 @@ import { RegisterPage } from "./pages/Auth/Register";
 import { LoginPage } from "./pages/Auth/Login";
 import Confirm from "./pages/Auth/Confirm";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getToken } from "./store/userSlice";
 
 function App() {
-  const { email, loading, error, token, succes } = useSelector(
+  const { email, loading, error, token, succes ,isLoggedIn } = useSelector(
     (state) => state.userReducer
   );
   let dispatch = useDispatch();
@@ -28,12 +28,12 @@ function App() {
   }, []);
   return (
     <Routes>
-      <Route path="/" element={!succes.message ? <RegisterPage /> : <Layout />}>
+      <Route path="/" element={!isLoggedIn ? <RegisterPage /> : <Layout />}>
         <Route index element={<Chat />} />
-        <Route path="/signin" element={<LoginPage />} />
         {/* <Route path="/signup" element={<RegisterPage />} /> */}
       </Route>
-     
+      <Route path="/signin" element={<LoginPage />} />
+
         <Route path="/confirm" element={<Confirm />} />
      
 

@@ -18,7 +18,7 @@ const Confirm = () => {
     const navigate = useNavigate();
 
     //console.log("ss")
-    const { email, loading, error, token, succes } = useSelector(state => state.userReducer);
+    const { email, loading, error, token, succes,isLoggedIn } = useSelector(state => state.userReducer);
     //  console.log(email)
     const { handleSubmit, handleChange, touched, values, errors } = useFormik({
         initialValues: {
@@ -47,10 +47,10 @@ const Confirm = () => {
     }, [token]);
 
     useEffect(() => {
-        if (succes.message) {
+        if (isLoggedIn) {
             navigate("/")
         }
-    }, [succes]);
+    }, [isLoggedIn]);
 
     return email ? (
         <Grid>

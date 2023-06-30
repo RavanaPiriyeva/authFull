@@ -8,11 +8,16 @@ import {
   Button,
 } from "@mui/material";
 import { CatchingPokemon } from "@mui/icons-material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../store/userSlice";
+
 
 export const Layout = () => {
-  const { email, loading, error, token, succes } = useSelector(state => state.userReducer);
-
+  const { email, loading, error, token, succes, isLoggedIn } = useSelector(state => state.userReducer);
+  let dispatch = useDispatch();
+  const logoutPage = () => {
+    dispatch(logout())
+  }
   return (
     <>
       <AppBar position="static">
@@ -40,7 +45,7 @@ export const Layout = () => {
           <Stack direction="row" spacing={2}>
             <>
               {
-                !succes.message ?
+                !isLoggedIn ?
                   <>
                     <Button
                       component={NavLink}
@@ -52,8 +57,7 @@ export const Layout = () => {
                     </Button>
                     <Button
                       component={NavLink}
-                      to="/"
-                      variant="outlined"
+                      to="/" variant="outlined"
                       color="inherit"
                     >
                       Sign Up
@@ -69,13 +73,14 @@ export const Layout = () => {
                       to="/"
                       sx={{ textDecoration: "none" }}
                     >
-                      {succes.email }
-                     </Typography>
+                      {succes.user?.name}
+                    </Typography>
                     <Button
                       component={NavLink}
                       to="/"
                       variant="outlined"
                       color="inherit"
+                      onClick={logoutPage}
                     >
                       Logout
                       </Button>
