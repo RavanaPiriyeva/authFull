@@ -33,7 +33,7 @@ export const LoginPage = () => {
       try {
         await dispatch(login(value));
       }
-       catch (error) {
+      catch (error) {
         console.log("error aaa", error);
         setErrors({ general: error.toString() });
       }
@@ -114,6 +114,9 @@ export const LoginPage = () => {
           </Grid>
           <Typography style={{ margin: "20px 0" }}>
             If you have not account ? <Link to="/">Register</Link>
+          </Typography>
+          <Typography style={{ margin: "20px 0" }}>
+            If you forgot password? <Link to="/forgetpassword">Password</Link>
           </Typography>
         </form>
       </Paper>

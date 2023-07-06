@@ -13,3 +13,6 @@ export const confirmValidation=object({
   //  email: string().email().required(),
     code: string().required(),
 })
+export const forgotPasswordValidations = object({
+    email: string().email().required(),
+  });

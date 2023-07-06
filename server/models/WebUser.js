@@ -3,19 +3,21 @@ const { default: mongoose } = require("mongoose");
 
 const WebUserSchema = new mongoose.Schema({
     email: String,
-    password:String,
-    name:String,
-    surname:String,
-    code:String,
+    password: String,
+    name: String,
+    surname: String,
+    code: String,
     codeExpire: Date,
     isActive: {
-        type:Boolean,
+        type: Boolean,
         default: false
     },
     codeCounter: {
-        type:Number,
+        type: Number,
         default: 3
-    }
+    },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
 })
 
 const WebUser = new mongoose.model('WebUser', WebUserSchema);

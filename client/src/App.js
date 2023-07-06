@@ -8,6 +8,8 @@ import Confirm from "./pages/Auth/Confirm";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getToken } from "./store/userSlice";
+import ForgetPassword from "./pages/Auth/ForgetPassword";
+import ChangePassword from "./pages/Auth/ChangePassword";
 
 function App() {
   const { email, loading, error, token, succes ,isLoggedIn } = useSelector(
@@ -35,7 +37,10 @@ function App() {
       <Route path="/signin" element={<LoginPage />} />
 
         <Route path="/confirm" element={<Confirm />} />
-     
+        <Route path="/forgetpassword" element={<ForgetPassword />} />
+        <Route path="/changepassword" element={<ChangePassword />} />
+
+
 
     </Routes>
   );

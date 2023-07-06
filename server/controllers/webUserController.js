@@ -4,6 +4,7 @@ var jwt = require('jsonwebtoken');
 const moment = require("moment")
 
 let privateKey = "ironmaiden"
+const crypto = require("crypto");
 
 const webUserController = {
     register: (req, res) => {
@@ -130,7 +131,62 @@ const webUserController = {
             res.status(500).json({ "message": "Token error!" })
         }
 
-    }
+    },
+    forgotPassword: (req, res) => {
+        const { email } = req.body;
+
+        WebUser.findOne({ email })
+            .then((user) => {
+                if (!user) {
+                    return res.status(404).json({ error: "User not found" });
+                }
+
+                const token = crypto.randomBytes(20).toString("hex");
+
+                user.forgetPassword = token;
+                user.save();
+
+                sendPasswordResetEmail(user.email, token, user);
+
+                res.status(200).json({ message: "Password reset email sent" });
+            })
+            .catch((error) => {
+                console.error(error);
+                res.status(500).json({ error: "Internal Server Error" });
+            });
+    },
+    resetPassword: async (req, res) => {
+        const { userId, token, newPassword } = req.body;
+
+        try {
+            const user = await WebUser.findById(userId);
+
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            }
+
+            if (user.resetPasswordToken !== token) {
+                return res.status(400).json({ message: "Invalid token" });
+            }
+
+            if (new Date() > user.resetPasswordExpiration) {
+                return res.status(400).json({ message: "Token has expired" });
+            }
+
+            const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+            user.password = hashedPassword;
+            user.resetPasswordToken = null;
+            user.resetPasswordExpiration = null;
+
+            await user.save();
+
+            res.json({ message: "Password reset successful" });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "Internal server error" });
+        }
+    },
 }
 
 
@@ -159,7 +215,17 @@ function sendConfirmEMail(to, code) {
     });
 }
 
-
+function sendPasswordResetEmail(email, token, user) {
+    const resetLink = `http://localhost:3001/changepassword?userId=${user._id}&token=${token}`;
+  
+    transporter.sendMail({
+      from: "c8657545@gmail.com",
+      to: email,
+      subject: "Reset Your Password",
+      text: `To reset your password, click the following link: ${resetLink}`,
+    });
+  }
+  
 
 module.exports = {
     webUserController
