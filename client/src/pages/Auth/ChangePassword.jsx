@@ -100,7 +100,7 @@ const ChangePassword = () => {
           />
           <Grid marginTop={3}>
             <Button fullWidth type="submit" variant="contained" color="primary">
-              Change Password
+              Change Passwordd
             </Button>
           </Grid>
         </form>
